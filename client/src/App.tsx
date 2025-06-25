@@ -9,6 +9,11 @@ type Resource = {
   description: string;
 };
 
+type EmergencyContact = {
+  name: string;
+  contact: string;
+};
+
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [resources, setResources] = useState<Resource[]>([]);
@@ -16,6 +21,14 @@ function App() {
   const [description, setDescription] = useState('');
 
   const backendUrl = 'https://healnet-y6tm.onrender.com/api/resources'; // ✅ Your backend URL
+
+  const emergencyContacts: EmergencyContact[] = [
+    { name: 'Women Helpline', contact: '181' },
+    { name: 'Police', contact: '100' },
+    { name: 'Mental Health Helpline', contact: '080-4611-0007' },
+    { name: 'Child Helpline', contact: '1098' },
+    { name: 'Emergency Ambulance', contact: '108' },
+  ];
 
   // ✅ Firebase Anonymous Login
   useEffect(() => {
@@ -102,7 +115,7 @@ function App() {
         </div>
 
         {/* 📚 Resources Section */}
-        <div>
+        <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">📚 Resources</h2>
           {resources.length === 0 ? (
             <p className="text-gray-500">No resources yet. Add one above!</p>
@@ -119,6 +132,24 @@ function App() {
               ))}
             </ul>
           )}
+        </div>
+
+        {/* 🚑 Emergency Contacts Section */}
+        <div>
+          <h2 className="text-2xl font-semibold mb-4">🚑 Emergency Contacts</h2>
+          <ul className="space-y-4">
+            {emergencyContacts.map((contact, index) => (
+              <li
+                key={index}
+                className="border rounded-lg p-4 bg-red-50 shadow-sm hover:shadow-md transition"
+              >
+                <h3 className="text-lg font-semibold">{contact.name}</h3>
+                <p className="text-red-700 font-mono text-lg">
+                  📞 {contact.contact}
+                </p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </div>
