@@ -61,14 +61,17 @@ function Home() {
     })
       .then((res) => res.json())
       .then(() => {
-        setResources([...resources, newResource]);
-        setTitle('');
-        setDescription('');
-      })
-      .catch((err) => console.error(err));
+     setResources([...resources, newResource]);
+     setTitle('');
+     setDescription('');
+    toast.success('Resource added successfully!');
+})
+
+      
   };
 
   return (
+  <>
     <Toaster position="top-center" />
     <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-6 mt-6">
       <h1 className="text-4xl font-bold text-center mb-4 text-indigo-600">
@@ -116,9 +119,8 @@ function Home() {
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">📚 Resources</h2>
         {resources.length === 0 ? (
-            <p className="text-gray-500 animate-pulse">⏳ Loading resources...</p>
-          ) : (
-
+          <p className="text-gray-500 animate-pulse">⏳ Loading resources...</p>
+        ) : (
           <ul className="space-y-4">
             {resources.map((resource, index) => (
               <li
@@ -151,7 +153,6 @@ function Home() {
         </ul>
       </div>
     </div>
-  );
-}
+  </>
+);
 
-export default Home;
