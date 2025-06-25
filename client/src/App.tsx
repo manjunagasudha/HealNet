@@ -157,3 +157,24 @@ function App() {
 }
 
 export default App;
+
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import Chat from './Chat'; // Import Chat
+
+// Wrap the return with BrowserRouter
+return (
+  <BrowserRouter>
+    <div className="...">
+      <nav className="mb-6">
+        <Link to="/" className="mr-4">Home</Link>
+        <Link to="/chat" className="text-indigo-600">Counselor Chat</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={/* your existing homepage component */} />
+        <Route path="/chat" element={<Chat />} />
+      </Routes>
+    </div>
+  </BrowserRouter>
+);
+
