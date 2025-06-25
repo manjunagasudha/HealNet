@@ -14,6 +14,36 @@ async function connectDB() {
     try {
         await client.connect();
         console.log('✅ MongoDB Connected');
+        const http = require('http');
+const { WebSocketServer } = require('ws');
+
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server });
+
+wss.on('connection', (ws) => {
+  console.log('🟢 New client connected');
+
+  ws.on('message', (message) => {
+    console.log(`Received: ${message}`);
+
+    // Broadcast message to all clients
+    wss.clients.forEach((client) => {
+      if (client.readyState === ws.OPEN) {
+        client.send(message.toString());
+      }
+    });
+  });
+
+  ws.on('close', () => {
+    console.log('🔴 Client disconnected');
+  });
+});
+
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
+
 
         const db = client.db('HealNet');
         const resources = db.collection('resources');
