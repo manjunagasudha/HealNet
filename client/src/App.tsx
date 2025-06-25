@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { auth } from './firebase';
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
+import Chat from './Chat'; // ✅ Chat Component
 
 type Resource = {
   _id?: string;
@@ -9,15 +11,27 @@ type Resource = {
   description: string;
 };
 
-function App() {
+type EmergencyContact = {
+  name: string;
+  contact: string;
+};
+
+function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [resources, setResources] = useState<Resource[]>([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const backendUrl = 'https://healnet-y6tm.onrender.com/api/resources'; // ✅ Your backend URL
+  const backendUrl = 'https://healnet-y6tm.onrender.com/api/resources';
 
-  // ✅ Firebase Anonymous Login
+  const emergencyContacts: EmergencyContact[] = [
+    { name: 'Women Helpline', contact: '181' },
+    { name: 'Police', contact: '100' },
+    { name: 'Mental Health Helpline', contact: '080-4611-0007' },
+    { name: 'Child Helpline', contact: '1098' },
+    { name: 'Emergency Ambulance', contact: '108' },
+  ];
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -26,11 +40,9 @@ function App() {
         signInAnonymously(auth);
       }
     });
-
     return () => unsubscribe();
   }, []);
 
-  // ✅ Fetch Resources
   useEffect(() => {
     fetch(backendUrl)
       .then((res) => res.json())
@@ -38,7 +50,6 @@ function App() {
       .catch((err) => console.error(err));
   }, []);
 
-  // ✅ Add Resource Handler
   const handleAdd = () => {
     if (!title.trim() || !description.trim()) return;
 
@@ -63,6 +74,15 @@ function App() {
         <h1 className="text-4xl font-bold text-center mb-6 text-indigo-600">
           HealNet
         </h1>
+
+        <nav className="flex justify-center mb-6 gap-6">
+          <Link to="/" className="text-blue-600 hover:underline">
+            Home
+          </Link>
+          <Link to="/chat" className="text-indigo-600 hover:underline">
+            Counselor Chat
+          </Link>
+        </nav>
 
         <div className="mb-4">
           {user ? (
@@ -102,7 +122,7 @@ function App() {
         </div>
 
         {/* 📚 Resources Section */}
-        <div>
+        <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">📚 Resources</h2>
           {resources.length === 0 ? (
             <p className="text-gray-500">No resources yet. Add one above!</p>
@@ -120,10 +140,38 @@ function App() {
             </ul>
           )}
         </div>
+
+        {/* 🚑 Emergency Contacts Section */}
+        <div>
+          <h2 className="text-2xl font-semibold mb-4">🚑 Emergency Contacts</h2>
+          <ul className="space-y-4">
+            {emergencyContacts.map((contact, index) => (
+              <li
+                key={index}
+                className="border rounded-lg p-4 bg-red-50 shadow-sm hover:shadow-md transition"
+              >
+                <h3 className="text-lg font-semibold">{contact.name}</h3>
+                <p className="text-red-700 font-mono text-lg">
+                  📞 {contact.contact}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
 }
 
-export default App;
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/chat" element={<Chat />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
 
+export default App;
