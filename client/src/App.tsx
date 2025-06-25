@@ -3,7 +3,7 @@ import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { auth } from './firebase';
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
-import Chat from './Chat'; // ✅ Chat Component
+import Chat from './Chat'; // ✅ Import Chat Component
 
 type Resource = {
   _id?: string;
@@ -29,7 +29,7 @@ function Home() {
     { name: 'Police', contact: '100' },
     { name: 'Mental Health Helpline', contact: '080-4611-0007' },
     { name: 'Child Helpline', contact: '1098' },
-    { name: 'Emergency Ambulance', contact: '108' },
+    { name: 'Ambulance', contact: '108' },
   ];
 
   useEffect(() => {
@@ -69,13 +69,14 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-6">
-      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8">
-        <h1 className="text-4xl font-bold text-center mb-6 text-indigo-600">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-4 sm:p-6">
+      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 sm:p-10">
+        <h1 className="text-4xl sm:text-5xl font-bold text-center mb-6 text-indigo-600">
           HealNet
         </h1>
 
-        <nav className="flex justify-center mb-6 gap-6">
+        {/* 🧭 Navigation */}
+        <nav className="flex justify-center mb-6 gap-6 text-lg">
           <Link to="/" className="text-blue-600 hover:underline">
             Home
           </Link>
@@ -84,6 +85,7 @@ function Home() {
           </Link>
         </nav>
 
+        {/* ✅ Firebase Status */}
         <div className="mb-4">
           {user ? (
             <div className="bg-green-100 text-green-800 p-3 rounded-md">
@@ -94,9 +96,9 @@ function Home() {
           )}
         </div>
 
-        {/* ➕ Add Resource Form */}
+        {/* ➕ Add Resource */}
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">➕ Add Resource</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-4">➕ Add Resource</h2>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="text"
@@ -123,7 +125,7 @@ function Home() {
 
         {/* 📚 Resources Section */}
         <div className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4">📚 Resources</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-4">📚 Resources</h2>
           {resources.length === 0 ? (
             <p className="text-gray-500">No resources yet. Add one above!</p>
           ) : (
@@ -143,7 +145,7 @@ function Home() {
 
         {/* 🚑 Emergency Contacts Section */}
         <div>
-          <h2 className="text-2xl font-semibold mb-4">🚑 Emergency Contacts</h2>
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-4">🚑 Emergency Contacts</h2>
           <ul className="space-y-4">
             {emergencyContacts.map((contact, index) => (
               <li
@@ -163,6 +165,7 @@ function Home() {
   );
 }
 
+// ✅ Main App Function with Routing
 function App() {
   return (
     <BrowserRouter>
@@ -175,3 +178,4 @@ function App() {
 }
 
 export default App;
+
