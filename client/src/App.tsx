@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { auth } from './firebase';
-import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
-import Chat from './Chat'; // ✅ Import Chat Component
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import Chat from './Chat';
 
 type Resource = {
   _id?: string;
@@ -64,8 +64,8 @@ function Home() {
       body: JSON.stringify(newResource),
     })
       .then((res) => res.json())
-      .then((savedResource) => {
-        setResources([...resources, savedResource]);
+      .then((saved) => {
+        setResources([...resources, saved]);
         setTitle('');
         setDescription('');
       })
@@ -73,32 +73,33 @@ function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-6">
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 sm:p-10">
-
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-100 p-4">
+      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6">
         <h1 className="text-4xl font-bold text-center mb-6 text-indigo-600">
           HealNet
         </h1>
 
-        <nav className="flex justify-center gap-6 mb-8">
-          <Link to="/" className="text-blue-600 hover:underline">
+        <nav className="flex gap-6 justify-center mb-6">
+          <Link to="/" className="hover:underline text-blue-600">
             Home
           </Link>
-          <Link to="/chat" className="text-indigo-600 hover:underline">
+          <Link to="/chat" className="hover:underline text-blue-600">
             Counselor Chat
           </Link>
         </nav>
 
-        {user ? (
-          <div className="bg-green-100 text-green-800 p-3 rounded-md mb-6">
-            ✅ Logged in anonymously as: <strong>{user.uid}</strong>
-          </div>
-        ) : (
-          <p>Loading user...</p>
-        )}
+        <div className="mb-4">
+          {user ? (
+            <div className="bg-green-100 text-green-800 p-3 rounded-md">
+              ✅ Logged in anonymously as: <strong>{user.uid}</strong>
+            </div>
+          ) : (
+            <p>Loading user...</p>
+          )}
+        </div>
 
         {/* ➕ Add Resource */}
-        <div className="mb-10">
+        <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">➕ Add Resource</h2>
           <div className="flex flex-col sm:flex-row gap-3">
             <input
@@ -125,15 +126,15 @@ function Home() {
         </div>
 
         {/* 📚 Resources */}
-        <div className="mb-10">
+        <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">📚 Resources</h2>
           {resources.length === 0 ? (
             <p className="text-gray-500">No resources yet. Add one above!</p>
           ) : (
             <ul className="space-y-4">
-              {resources.map((resource) => (
+              {resources.map((resource, index) => (
                 <li
-                  key={resource._id}
+                  key={index}
                   className="border rounded-lg p-4 shadow-sm hover:shadow-md transition"
                 >
                   <h3 className="text-xl font-semibold">{resource.title}</h3>
@@ -166,7 +167,6 @@ function Home() {
   );
 }
 
-// ✅ App with Routing
 function App() {
   return (
     <BrowserRouter>
