@@ -114,8 +114,9 @@ function Home() {
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">📚 Resources</h2>
         {resources.length === 0 ? (
-          <p className="text-gray-500">No resources yet. Add one above!</p>
-        ) : (
+            <p className="text-gray-500 animate-pulse">⏳ Loading resources...</p>
+          ) : (
+
           <ul className="space-y-4">
             {resources.map((resource, index) => (
               <li
