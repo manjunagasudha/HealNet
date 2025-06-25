@@ -24,6 +24,10 @@ function App() {
         <Route path="/chat" element={<Chat />} />
       </Routes>
     </div>
+    <footer className="text-center text-sm py-4 text-gray-500">
+  © 2025 HealNet. All rights reserved.
+</footer>
+
   );
 }
 
