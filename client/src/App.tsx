@@ -49,7 +49,7 @@ function App() {
       body: JSON.stringify({ title: newTitle, description: newDescription }),
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then((_data) => {
         setResources((prev) => [...prev, { title: newTitle, description: newDescription }]);
         setNewTitle('');
         setNewDescription('');
