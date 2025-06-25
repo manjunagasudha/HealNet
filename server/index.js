@@ -24,7 +24,7 @@ app.get('/api/emergency-contacts', (req, res) => {
 
 // Start Server
 app.listen(5000, () => {
-  console.log('✅ Server running on http://localhost:5000');
+  console.log('🚀 Server running on http://localhost:${port}');
 });
 
 app.get('/', (req, res) => {
