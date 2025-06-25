@@ -2,8 +2,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "mongodb": "^6.5.0"
-
+    "mongodb": "^6.5.0",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
