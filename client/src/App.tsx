@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link } from 'react-router-dom';
 import Home from './Home';
 import Chat from './Chat';
 
@@ -28,4 +28,3 @@ function App() {
 }
 
 export default App;
-
