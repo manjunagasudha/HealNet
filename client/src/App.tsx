@@ -9,12 +9,8 @@ function App() {
       <nav className="bg-indigo-600 text-white px-6 py-4 flex justify-between">
         <div className="text-2xl font-bold">HealNet</div>
         <div className="flex gap-6 items-center">
-          <Link to="/" className="hover:underline">
-            Home
-          </Link>
-          <Link to="/chat" className="hover:underline">
-            Counselor Chat
-          </Link>
+          <Link to="/" className="hover:underline">Home</Link>
+          <Link to="/chat" className="hover:underline">Counselor Chat</Link>
         </div>
       </nav>
 
@@ -28,4 +24,3 @@ function App() {
 }
 
 export default App;
-
