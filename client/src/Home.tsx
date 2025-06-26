@@ -1,8 +1,8 @@
-import toast, { Toaster } from 'react-hot-toast';
 import { useEffect, useState } from 'react';
 import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 import type { User } from 'firebase/auth';
 import { auth } from './firebase';
+import toast, { Toaster } from 'react-hot-toast';
 
 type Resource = {
   _id?: string;
@@ -66,9 +66,7 @@ function Home() {
         setDescription('');
         toast.success('Resource added successfully!');
       })
-      .catch(() => {
-        toast.error('Failed to add resource');
-      });
+      .catch(() => toast.error('Failed to add resource.'));
   };
 
   return (
@@ -89,7 +87,7 @@ function Home() {
           )}
         </div>
 
-        {/* Add Resource Form */}
+        {/* Add Resource */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">➕ Add Resource</h2>
           <div className="flex flex-col sm:flex-row gap-3">
@@ -116,13 +114,11 @@ function Home() {
           </div>
         </div>
 
-        {/* Resources List */}
+        {/* Resource List */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold mb-4">📚 Resources</h2>
           {resources.length === 0 ? (
-            <p className="text-gray-500 animate-pulse">
-              ⏳ Loading resources...
-            </p>
+            <p className="text-gray-500 animate-pulse">⏳ Loading resources...</p>
           ) : (
             <ul className="space-y-4">
               {resources.map((resource, index) => (
@@ -140,9 +136,7 @@ function Home() {
 
         {/* Emergency Contacts */}
         <div>
-          <h2 className="text-2xl font-semibold mb-4">
-            🚑 Emergency Contacts
-          </h2>
+          <h2 className="text-2xl font-semibold mb-4">🚑 Emergency Contacts</h2>
           <ul className="space-y-4">
             {emergencyContacts.map((contact, index) => (
               <li
@@ -163,4 +157,3 @@ function Home() {
 }
 
 export default Home;
-
