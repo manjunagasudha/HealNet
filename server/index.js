@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
+const http = require('http');
+const { WebSocketServer } = require('ws');
 require('dotenv').config();
 
 const app = express();
@@ -11,69 +13,59 @@ const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
 
 async function connectDB() {
-    try {
-        await client.connect();
-        console.log('✅ MongoDB Connected');
-        const http = require('http');
-const { WebSocketServer } = require('ws');
+  try {
+    await client.connect();
+    console.log('✅ MongoDB Connected');
 
-const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
+    const db = client.db('HealNet');
+    const resources = db.collection('resources');
 
-wss.on('connection', (ws) => {
-  console.log('🟢 New client connected');
-
-  ws.on('message', (message) => {
-    console.log(`Received: ${message}`);
-
-    // Broadcast message to all clients
-    wss.clients.forEach((client) => {
-      if (client.readyState === ws.OPEN) {
-        client.send(message.toString());
-      }
+    // API Routes
+    app.get('/', (req, res) => {
+      res.send('HealNet Backend is Running ✅');
     });
-  });
 
-  ws.on('close', () => {
-    console.log('🔴 Client disconnected');
-  });
-});
+    app.get('/api/resources', async (req, res) => {
+      const data = await resources.find().toArray();
+      res.json(data);
+    });
 
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+    app.post('/api/resources', async (req, res) => {
+      const newResource = req.body;
+      const result = await resources.insertOne(newResource);
+      res.json(result);
+    });
 
+    // WebSocket Setup
+    const server = http.createServer(app);
+    const wss = new WebSocketServer({ server });
 
-        const db = client.db('HealNet');
-        const resources = db.collection('resources');
+    wss.on('connection', (ws) => {
+      console.log('🟢 New client connected');
 
-        app.get('/', (req, res) => {
-            res.send('HealNet Backend is Running ✅');
+      ws.on('message', (message) => {
+        console.log(`Received: ${message}`);
+
+        // Broadcast message to all clients
+        wss.clients.forEach((client) => {
+          if (client.readyState === ws.OPEN) {
+            client.send(message.toString());
+          }
         });
+      });
 
-        app.get('/api/resources', async (req, res) => {
-            const data = await resources.find().toArray();
-            res.json(data);
-        });
+      ws.on('close', () => {
+        console.log('🔴 Client disconnected');
+      });
+    });
 
-        app.post('/api/resources', async (req, res) => {
-            const newResource = req.body;
-            const result = await resources.insertOne(newResource);
-            res.json(result);
-        });
-
-    } catch (err) {
-        console.error(err);
-    }
+    const PORT = process.env.PORT || 10000;
+    server.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error('❌ DB Connection Error:', err);
+  }
 }
 
 connectDB();
-
-const PORT = process.env.PORT || 10000;
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
-
-});
